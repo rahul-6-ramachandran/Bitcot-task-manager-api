@@ -1,8 +1,13 @@
 import  { validationResult,check } from 'express-validator'
 
-
+// validators
 export const validateUserSignin = () => {
   return [
+    check("username")
+      .trim()
+      .escape()
+      .notEmpty()
+      .withMessage("Please input username"),
     check("email")
       .trim()
       .escape()
