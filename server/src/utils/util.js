@@ -1,7 +1,7 @@
 import  { validationResult,check } from 'express-validator'
 
 
-export const validateUser = () => {
+export const validateUserSignin = () => {
   return [
     check("email")
       .trim()
