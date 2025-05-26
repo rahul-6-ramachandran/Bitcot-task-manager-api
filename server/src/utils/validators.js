@@ -1,13 +1,9 @@
 import  { validationResult,check } from 'express-validator'
+import jwt  from 'jsonwebtoken';
 
 // validators
 export const validateUserSignin = () => {
   return [
-    check("username")
-      .trim()
-      .escape()
-      .notEmpty()
-      .withMessage("Please input username"),
     check("email")
       .trim()
       .escape()
@@ -39,3 +35,24 @@ export const validateUserSignin = () => {
       }
   ];
 };
+
+//JWT Authentication
+export const authenticateUser = (req,res,next)=>{
+  const authHeader = req.header('Authorization');
+  const token = authHeader && authHeader.split(' ')[1]
+
+  if(!token){
+    return res.status(401).json({message : "Authorisation Header Not Provided"})
+  }
+
+  try{
+
+    const decodedToken = jwt.verify(token,process.env.JWT_SECRET)
+
+    req.user = decodedToken
+  
+    next()
+  }catch(err){
+      return res.status(401).json({ message: "Invalid or expired token" });
+  }
+}

@@ -1,3 +1,3 @@
 import authRoute from './auth/authRoute.js'
-
-export {authRoute}
+import taskRoute from './task/taskRoute.js'
+export {authRoute,taskRoute}
