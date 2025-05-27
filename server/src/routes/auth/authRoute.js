@@ -1,6 +1,6 @@
 import express from 'express'
-import { getresetPasswordLink, getUserTokenForForgotPassword, registerUser, } from '../../controllers/auth/authcontoller.js'
-import { validateEmail, validateUserSignin } from '../../utils/validators.js'
+import { checkTokenForResetPassword,  getUserTokenForForgotPassword, registerUser, updatePassword, } from '../../controllers/auth/authcontoller.js'
+import { validateEmail, validatePassword, validateUserSignin } from '../../utils/validators.js'
 
 const router = express.Router()
 
@@ -9,7 +9,6 @@ const router = express.Router()
 //  Endpoint : api/user/signin
 //  Body : email,password
 //  Params : None
-
 router.post('/signin',validateUserSignin(), registerUser)
 
 
@@ -18,7 +17,6 @@ router.post('/signin',validateUserSignin(), registerUser)
 //  Endpoint : api/user/forgot-passsword
 //  Body : email
 //  Params : None
-
 router.post('/forgot-passsword',validateEmail(),getUserTokenForForgotPassword)
 
 
@@ -28,18 +26,16 @@ router.post('/forgot-passsword',validateEmail(),getUserTokenForForgotPassword)
 //  Endpoint : api/user/reset-passsword
 //  Body : None
 //  Params : token
-
-router.get('/reset-password/:token', getresetPasswordLink)
-
+router.get('/reset-password/:token', checkTokenForResetPassword)
 
 
-//  -----  Reset Password -----
+
+//  -----  Update Password -----
 //  Method : PUT
 //  Endpoint : api/user/reset-passsword
 //  Body : Password
 //  Params : token
-
-router.get('/reset-password/:token', updatePassword )
+router.put('/reset-password/:token',validatePassword(), updatePassword )
 
 
 export default router

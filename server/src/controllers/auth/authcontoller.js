@@ -39,6 +39,7 @@ const registerUser = async(req,res)=>{
 }
 
 
+// Forgot Password
 const getUserTokenForForgotPassword = async(req,res)=>{
     const {email} = req.body
     const user = await getUserByEmail(email)
@@ -69,7 +70,7 @@ const getUserTokenForForgotPassword = async(req,res)=>{
 }
 
 
-const getresetPasswordLink = async(req,res)=>{
+const checkTokenForResetPassword = async(req,res)=>{
     const {token} = req.params
 
     const {userId} = decodeResetToken(token)
@@ -93,10 +94,35 @@ const getresetPasswordLink = async(req,res)=>{
 }
 
 
-const updatePassword = (req,res)=>{
+const updatePassword = async(req,res)=>{
     const {token} = req.params
-    
 
+    const {userId} = decodeResetToken(token)
+
+    const user = await getUserById(userId)
+
+   
+    if(!user){
+        return res.status(500).json({error : "Cannot Find User"})
+    }
+
+    const hashedPassword = await hashUserPassword(req.body.password)
+
+    
+   
+    await updateUserById(user?._id,
+        {
+            password : hashedPassword
+        }
+    )
+    .then((result)=>{
+        if(result){
+            return res.status(200).json({message : "Password Changed Successfully"})
+        }
+    })
 }
 
-export { registerUser , getUserTokenForForgotPassword , getresetPasswordLink}
+
+
+
+export { registerUser , getUserTokenForForgotPassword , checkTokenForResetPassword , updatePassword}
