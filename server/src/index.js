@@ -2,8 +2,14 @@
 import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
+
+// middleware imports
+import { limiter } from './middlewares/index.js'
+
+// Module Imports
 import { authRoute, taskRoute } from './routes/index.js'
 import { connectDB } from './config/db/database.js'
+
 
 dotenv.configDotenv()
 
@@ -12,7 +18,7 @@ const app = express()
 // middlewares
 app.use(express.json())
 app.use(cors())
-
+app.use(limiter())
 
 
 const PORT = process.env.PORT
