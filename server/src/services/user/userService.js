@@ -8,7 +8,7 @@ const getUserByEmail = async(email)=>{
         return user
 
     } catch (error) {
-        throw new Error({error: error})
+        throw new Error(`error:${error}`)
     }
 }
 
@@ -21,7 +21,7 @@ const createNewUser = async(body)=>{
         return  generateToken(user)
     
     } catch (error) {
-        throw new Error({error: error})
+        throw new Error(`error:${error}`)
     }
 }
 
@@ -34,9 +34,21 @@ const loginUser = async(plainPassword,userPayload)=>{
         return  generateToken(userPayload)
 
     } catch (error) {
-        throw new Error({error: error})
+        throw new Error(`error:${error}`)
     }
 }
 
+const updateUserById = async(_id, model)=>{
+    try {
+        const updatedUser = await User.findByIdAndUpdate(
+            {_id : _id},
+            model,
+            {new : true}
+        )
+        return updatedUser
+    } catch (error) {
+        throw new Error(`error:${error}`)
+    }
+}
 
-export {getUserByEmail,createNewUser,loginUser}
+export {getUserByEmail,createNewUser,loginUser, updateUserById}

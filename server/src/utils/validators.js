@@ -36,6 +36,26 @@ export const validateUserSignin = () => {
   ];
 };
 
+
+export const validateEmail = ()=>{
+  return [
+    check("email")
+    .trim()
+    .escape()
+    .notEmpty()
+    .withMessage("Please input your email.")
+    .isEmail()
+    .withMessage("Please input a valid email"),
+    (req,res,next)=>{
+      const errors = validationResult(req)
+      if (!errors.isEmpty()) {
+          return res.status(400).json({ errors: errors.array() });
+        }
+        next()
+    }
+  ]
+}
+
 //JWT Authentication
 export const authenticateUser = (req,res,next)=>{
   const authHeader = req.header('Authorization');
