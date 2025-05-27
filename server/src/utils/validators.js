@@ -1,5 +1,5 @@
-import  { validationResult,check } from 'express-validator'
-import jwt  from 'jsonwebtoken';
+import { validationResult, check } from "express-validator";
+import jwt from "jsonwebtoken";
 
 // validators
 export const validateUserSignin = () => {
@@ -26,38 +26,36 @@ export const validateUserSignin = () => {
       .withMessage(
         "Please ensure your password is at least 6 characters long, has at least one uppercase and lowercase letters."
       ),
-      (req,res,next)=>{
-        const errors = validationResult(req)
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-          }
-          next()
+    (req, res, next) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
       }
+      next();
+    },
   ];
 };
 
-
-export const validateEmail = ()=>{
+export const validateEmail = () => {
   return [
     check("email")
-    .trim()
-    .escape()
-    .notEmpty()
-    .withMessage("Please input your email.")
-    .isEmail()
-    .withMessage("Please input a valid email"),
-    (req,res,next)=>{
-      const errors = validationResult(req)
+      .trim()
+      .escape()
+      .notEmpty()
+      .withMessage("Please input your email.")
+      .isEmail()
+      .withMessage("Please input a valid email"),
+    (req, res, next) => {
+      const errors = validationResult(req);
       if (!errors.isEmpty()) {
-          return res.status(400).json({ errors: errors.array() });
-        }
-        next()
-    }
-  ]
-}
+        return res.status(400).json({ errors: errors.array() });
+      }
+      next();
+    },
+  ];
+};
 
-
-export const validatePassword = ()=>{
+export const validatePassword = () => {
   return [
     check("password")
       .trim()
@@ -74,34 +72,34 @@ export const validatePassword = ()=>{
       .withMessage(
         "Please ensure your password is at least 6 characters long, has at least one uppercase and lowercase letters."
       ),
-    (req,res,next)=>{
-      const errors = validationResult(req)
+    (req, res, next) => {
+      const errors = validationResult(req);
       if (!errors.isEmpty()) {
-          return res.status(400).json({ errors: errors.array() });
-        }
-        next()
-    }
-  ]
-}
+        return res.status(400).json({ errors: errors.array() });
+      }
+      next();
+    },
+  ];
+};
 
 //JWT Authentication
-export const authenticateUser = (req,res,next)=>{
-  const authHeader = req.header('Authorization');
-  const token = authHeader && authHeader.split(' ')[1]
+export const authenticateUser = (req, res, next) => {
+  const authHeader = req.header("Authorization");
+  const token = authHeader && authHeader.split(" ")[1];
 
-  if(!token){
-    return res.status(401).json({message : "Authorisation Header Not Provided"})
+  if (!token) {
+    return res
+      .status(401)
+      .json({ message: "Authorisation Header Not Provided" });
   }
 
-  try{
+  try {
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
-    const decodedToken = jwt.verify(token,process.env.JWT_SECRET)
+    req.user = decodedToken;
 
-    req.user = decodedToken
-  
-    next()
-  }catch(err){
-      return res.status(401).json({ message: "Invalid or expired token" });
+    next();
+  } catch (err) {
+    return res.status(401).json({ message: "Invalid or expired token" });
   }
-}
-
+};
