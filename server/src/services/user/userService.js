@@ -51,4 +51,9 @@ const updateUserById = async(_id, model)=>{
     }
 }
 
+export const getUserById = async(_id)=>{
+   const user = await User.findById({_id})
+   return  user
+}
+
 export {getUserByEmail,createNewUser,loginUser, updateUserById}

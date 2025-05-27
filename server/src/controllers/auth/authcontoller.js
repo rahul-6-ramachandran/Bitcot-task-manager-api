@@ -1,6 +1,6 @@
-import { generateToken, hashUserPassword, sendPasswordResetMail } from "../../../helpers/index.js"
+import { decodeResetToken, generateToken, hashUserPassword, sendPasswordResetMail } from "../../../helpers/index.js"
 import User from "../../models/user/userModel.js"
-import { createNewUser,getUserByEmail, loginUser, updateUserById } from "../../services/user/userService.js"
+import { createNewUser,getUserByEmail, getUserById, loginUser, updateUserById } from "../../services/user/userService.js"
 
 // User Signup
 const registerUser = async(req,res)=>{
@@ -69,5 +69,34 @@ const getUserTokenForForgotPassword = async(req,res)=>{
 }
 
 
+const getresetPasswordLink = async(req,res)=>{
+    const {token} = req.params
 
-export { registerUser , getUserTokenForForgotPassword}
+    const {userId} = decodeResetToken(token)
+
+    const user = await getUserById(userId)
+
+    if(!user){
+        return res.status(500).json({error : "Cannot Find User"})
+    }
+    const TEN_MINUTES = 10 * 60 * 1000; 
+
+    const timeSinceUpdate = Date.now() - new Date(user.updatedAt).getTime();
+    
+    if (timeSinceUpdate > TEN_MINUTES) {
+      return res.status(401).json({ error: "Reset Link Expired" });
+    }
+
+    if(user.resetToken === token){
+        return res.status(200).json({message : "User Validation Successful Using Token"})
+    }
+}
+
+
+const updatePassword = (req,res)=>{
+    const {token} = req.params
+    
+
+}
+
+export { registerUser , getUserTokenForForgotPassword , getresetPasswordLink}

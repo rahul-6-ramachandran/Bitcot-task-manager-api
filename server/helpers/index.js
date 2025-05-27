@@ -32,7 +32,7 @@ const sendPasswordResetMail = async(email,resetToken)=>{
         throw new Error("Email Service Credentials are not defined in environment variable");
     }
     
-        const resetURL = `${process.env.HOST_URL}/reset-password/${resetToken}`
+        const resetURL = `${process.env.HOST_URL}/api/user/reset-password/${resetToken}`
         const transporter = nodemailer.createTransport({
             service : 'gmail',
             auth : {
@@ -59,4 +59,10 @@ const sendPasswordResetMail = async(email,resetToken)=>{
     
 }
 
-export { generateToken , sendPasswordResetMail };
+
+const decodeResetToken = (token)=>{
+    const decodedToken = jsonwebtoken.verify(token,process.env.JWT_SECRET)
+    return decodedToken
+}
+
+export { generateToken , sendPasswordResetMail, decodeResetToken };

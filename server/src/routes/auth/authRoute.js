@@ -1,5 +1,5 @@
 import express from 'express'
-import { getUserTokenForForgotPassword, registerUser } from '../../controllers/auth/authcontoller.js'
+import { getresetPasswordLink, getUserTokenForForgotPassword, registerUser, } from '../../controllers/auth/authcontoller.js'
 import { validateEmail, validateUserSignin } from '../../utils/validators.js'
 
 const router = express.Router()
@@ -23,13 +23,23 @@ router.post('/forgot-passsword',validateEmail(),getUserTokenForForgotPassword)
 
 
 
-//  -----  Reset Password -----
-//  Method : POST
+//  -----  Reset Password Link -----
+//  Method : GET
 //  Endpoint : api/user/reset-passsword
-//  Body : email
-//  Params : None
+//  Body : None
+//  Params : token
 
-router.post('/reset-passsword/:id', resetPassword)
+router.get('/reset-password/:token', getresetPasswordLink)
+
+
+
+//  -----  Reset Password -----
+//  Method : PUT
+//  Endpoint : api/user/reset-passsword
+//  Body : Password
+//  Params : token
+
+router.get('/reset-password/:token', updatePassword )
 
 
 export default router
