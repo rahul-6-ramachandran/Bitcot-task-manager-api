@@ -7,9 +7,9 @@ const router = express.Router();
 
 //  -----  Task Creation -----
 //  Method : POST
-//  Endpoint : api/task/:userId
-//  Body : email,password
-//  Params : userId
+//  Endpoint : api/task
+//  Body : { title,description,status,priority,deadLine,assignedTo }
+//  Params : 
 
 router.post("/", authenticateUser,validateCreateTask(), createNewTask);
 

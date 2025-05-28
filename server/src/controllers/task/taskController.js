@@ -1,6 +1,6 @@
 
-import { Types } from "mongoose"
 import { createTask } from "../../services/task/taskService.js"
+import { createTaskIndex } from "../../services/commonService.js"
 
 
 const createNewTask = async(req,res)=>{
@@ -11,16 +11,19 @@ const createNewTask = async(req,res)=>{
     body = {
         ...body,
         createdBy :userId,
-        assignedTo : body?.assignedTo
+        assignedTo : body?.assignedTo,
+        deadLine :  body?.deadLine
     }
 
     const newTask = await createTask(body)
     if(!newTask){
         return res.status(500).json({error : "Cannot Add Task"})
     }
-
-    return res.status(200).json({message:"Task Created Successfully"})
-
+    
+    createTaskIndex(newTask)
+    .then(()=>{
+        return res.status(200).json({message:"Task Created Successfully"})
+    })
 }
 
 

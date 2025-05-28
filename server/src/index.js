@@ -9,6 +9,7 @@ import { limiter } from './middlewares/index.js'
 // Module Imports
 import { authRoute, taskRoute } from './routes/index.js'
 import { connectDB } from './config/db/database.js'
+import esClient, { runElasticClient } from './config/elasticSearch/elasticClient.js'
 
 
 dotenv.configDotenv()
@@ -26,9 +27,14 @@ const PORT = process.env.PORT
 // DB Connection
 connectDB()
 
+// ElasticSearch Connection
+runElasticClient()
+
 app.get('/',(req,res)=>{
     res.json({message:"Hey"})
 })
+
+
 
 // routes 
 app.use('/api/user',authRoute)
