@@ -82,6 +82,43 @@ export const validatePassword = () => {
   ];
 };
 
+
+export const validateCreateTask = () => {
+  return [
+    check("title")
+      .trim()
+      .escape()
+      .notEmpty()
+      .withMessage("Please Input Task Title"),
+    check("deadLine")
+      .trim()
+      .isDate()
+      .withMessage("Please Enter a Valid Date")
+      .notEmpty()
+      .withMessage("Please Enter a Date in String Format"),
+    check("priority")
+      .trim()
+      .escape()
+      .isString()
+      .notEmpty()
+      .withMessage("Please Enter Priority Constraints"),
+    check("status")
+      .trim()
+      .escape(),
+    check("assignedTo")
+      .trim()
+      .notEmpty()
+      .withMessage("Please Provide the Assigned To field"),
+    (req, res, next) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+      next();
+    },
+  ];
+};
+
 //JWT Authentication
 export const authenticateUser = (req, res, next) => {
   const authHeader = req.header("Authorization");

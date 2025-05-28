@@ -1,5 +1,5 @@
 import express from "express";
-import { authenticateUser } from "../../utils/validators.js";
+import { authenticateUser, validateCreateTask } from "../../utils/validators.js";
 import { createNewTask } from "../../controllers/task/taskController.js";
 
 const router = express.Router();
@@ -11,6 +11,6 @@ const router = express.Router();
 //  Body : email,password
 //  Params : userId
 
-router.post("/:userId", authenticateUser, createNewTask);
+router.post("/", authenticateUser,validateCreateTask(), createNewTask);
 
 export default router;
