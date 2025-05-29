@@ -94,4 +94,10 @@ const updateUserTask = async (req, res) => {
   });
 };
 
+const getAllUserTasks = (req,res)=>{
+  const {userId} = req.user
+  
+}
+
+
 export { createNewTask, updateUserTask };

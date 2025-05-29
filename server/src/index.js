@@ -7,7 +7,7 @@ import dotenv from 'dotenv'
 import { limiter } from './middlewares/index.js'
 
 // Module Imports
-import { authRoute, taskRoute } from './routes/index.js'
+import { authRoute, logRoute, taskRoute } from './routes/index.js'
 import { connectDB } from './config/db/database.js'
 import esClient, { runElasticClient } from './config/elasticSearch/elasticClient.js'
 import { handleError } from './middlewares/errorHandling.js'
@@ -40,6 +40,7 @@ app.get('/',(req,res)=>{
 // routes 
 app.use('/api/user',authRoute)
 app.use('/api/task',taskRoute)
+app.use('/api/logs',logRoute)
 
 // Errorhandling Middleware
 app.use(handleError);
