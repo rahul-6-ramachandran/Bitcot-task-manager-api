@@ -23,7 +23,7 @@ export const updateTask = async (_id, model) => {
 
 export const getTaskById = async(_id)=>{
     try {
-        return await Task.findById(_id)
+        return await Task.findById({_id})
     } catch (error) {
         throw new Error(error);
     }

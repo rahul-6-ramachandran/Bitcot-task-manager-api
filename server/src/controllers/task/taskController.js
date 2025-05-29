@@ -2,6 +2,7 @@
 import { createTask, getTaskById, updateTask } from "../../services/task/taskService.js"
 import { createTaskIndex, updateTaskIndex } from "../../services/commonService.js"
 import mongoose, { Types } from "mongoose"
+import { Priority, Status } from "../../utils/enum.js"
 
 
 const createNewTask = async(req,res)=>{
@@ -29,31 +30,47 @@ const createNewTask = async(req,res)=>{
 }
 
 
-const updateAssignedTo = async(req,res)=>{
+const updateUserTask = async(req,res)=>{
     const {userId} = req.user
     const {taskId} = req.params
+    const {body} = req
 
-    console.log(taskId)
+
+
     const task = await getTaskById(taskId)
     
     if(!task){
         return res.status(500).json({error: "Task Not Found"})
     }
 
-    if(task?.createdBy.toString() !== userId){
-        return res.status(401).json({error: "Unauthorised Request"})
+    if(body?.assignedTo){
+        if(task?.createdBy.toString() !== userId){
+            return res.status(401).json({error: "Unauthorised Request"})
+        }
     }
 
-    const updatedTask = await updateTask(taskId,req.body)
+    if(body?.status && !Object.values(Status).includes(body.status)){
+        return res.status(500).json({error : "Please Enter Valid Status"})
+    }
+
+    if(body?.priority && !Object.values(Priority).includes(body?.priority)){
+        return res.status(500).json({error : "Please Enter a Valid Priority Constraint"})
+    }
+
+     
+    const  updatedTask = await updateTask(taskId,req.body)
 
     if(!updatedTask){
         return res.status(500).json({error : "Cannot Update Task"})
     }
+   
+
+
     
     updateTaskIndex(updatedTask)
     .then(()=>{
-        return res.status(200).json({message:"Task Assigned Successfully"})
+        return res.status(200).json({message:"Task Updated Successfully"})
     })
 }
 
-export {createNewTask,updateAssignedTo}
+export {createNewTask,updateUserTask}
