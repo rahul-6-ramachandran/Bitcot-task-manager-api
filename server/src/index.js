@@ -10,6 +10,7 @@ import { limiter } from './middlewares/index.js'
 import { authRoute, taskRoute } from './routes/index.js'
 import { connectDB } from './config/db/database.js'
 import esClient, { runElasticClient } from './config/elasticSearch/elasticClient.js'
+import { handleError } from './middlewares/errorHandling.js'
 
 
 dotenv.configDotenv()
@@ -41,9 +42,7 @@ app.use('/api/user',authRoute)
 app.use('/api/task',taskRoute)
 
 // Errorhandling Middleware
-app.use((err, req, res, next) => {
-  res.status(500).json({ error : "Something Went Wrong , Please Try again later"});
-});
+app.use(handleError);
 
 app.listen(PORT, ()=>{
   console.log(`Successfully running in ${PORT} `)
