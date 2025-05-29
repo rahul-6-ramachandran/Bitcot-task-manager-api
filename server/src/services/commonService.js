@@ -41,6 +41,6 @@ export const updateTaskIndex = async(updatedTask)=>{
             },
         })
     } catch (error) {
-        
+        throw new Error(`An Unexpected Error Occured ${error}`)
     }
 }

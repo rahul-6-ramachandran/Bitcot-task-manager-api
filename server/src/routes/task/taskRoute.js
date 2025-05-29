@@ -1,6 +1,6 @@
 import express from "express";
 import { authenticateUser, validateCreateTask } from "../../utils/validators.js";
-import { createNewTask } from "../../controllers/task/taskController.js";
+import { createNewTask, updateAssignedTo } from "../../controllers/task/taskController.js";
 
 const router = express.Router();
 
@@ -12,5 +12,14 @@ const router = express.Router();
 //  Params : 
 
 router.post("/", authenticateUser,validateCreateTask(), createNewTask);
+
+
+
+//  -----  Task Assignment -----
+//  Method : POST
+//  Endpoint : api/task
+//  Body : { assignedTo }
+//  Params : taskId
+router.patch("/:taskId", authenticateUser, updateAssignedTo);
 
 export default router;
