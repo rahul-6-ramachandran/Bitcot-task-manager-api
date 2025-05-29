@@ -16,6 +16,7 @@ const generateToken = async (payload) => {
     {
       userId: payload?._id,
       email: payload?.email,
+      username : payload?.username
     },
     process.env.JWT_SECRET,
     {

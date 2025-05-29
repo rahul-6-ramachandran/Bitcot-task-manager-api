@@ -10,3 +10,9 @@ export const Status = {
     COMPLETED : "Completed"
 }
 
+export const UserActions = {
+    LOGIN : "Login",
+    CREATE_TASK : "CreateTask",
+    UPDATE_TASK : "UpdateTask",
+    UPDATE_PASSWORD : "UpdatePassword"
+}
