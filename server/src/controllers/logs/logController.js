@@ -6,5 +6,10 @@ export const getUserLogs = async(req,res)=>{
     const model = {
         userId : userId
     }
-    return await getLogs(model)
+    const userLogs =  await getLogs(model)
+
+    return res.status(200).json({
+        status : 200,
+        userLogs : userLogs
+    })
 }
