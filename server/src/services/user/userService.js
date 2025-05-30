@@ -8,7 +8,7 @@ const getUserByEmail = async(email)=>{
         return user
 
     } catch (error) {
-        throw new Error(`error:${error}`)
+        throw error
     }
 }
 
@@ -16,25 +16,29 @@ const createNewUser = async(body)=>{
     try {
         const user = await User.create(body)
         if(!user){
-            throw new Error("Cannot Create User, Please Try again later.!")
+            const err = new Error("Cannot Create User, Please Try again later.!");
+            err.statusCode = 500;
+            throw err
         }
         return  generateToken(user)
     
     } catch (error) {
-        throw new Error(`error:${error}`)
+        throw error
     }
 }
 
 const loginUser = async(plainPassword,userPayload)=>{
     try {
-        const isValid = bcrypt.compare(plainPassword,userPayload?.password)
+        const isValid = await bcrypt.compare(plainPassword,userPayload?.password)
         if(!isValid){
-            throw new Error("Password Incorrect")
+            const err = new Error("Password Incorrect");
+            err.statusCode = 401;
+            throw err
         }
-        return  generateToken(userPayload)
+        return await generateToken(userPayload)
 
     } catch (error) {
-        throw new Error(`error:${error}`)
+        throw error
     }
 }
 
@@ -47,7 +51,7 @@ const updateUserById = async(_id, model)=>{
         )
         return updatedUser
     } catch (error) {
-        throw new Error(`error:${error}`)
+        throw error
     }
 }
 

@@ -1,5 +1,5 @@
 import express from "express";
-import { authenticateUser, validateCreateTask } from "../../utils/validators.js";
+import { authenticateUser, validateCreateTask, validateUpdateTask } from "../../utils/validators.js";
 import { createNewTask,getAllUserTasks,updateUserTask } from "../../controllers/task/taskController.js";
 
 const router = express.Router();
@@ -18,16 +18,16 @@ router.post("/", authenticateUser,validateCreateTask(), createNewTask);
 //  -----  Task Assignment -----
 //  Method : PATCH
 //  Endpoint : api/task
-//  Body : { assignedTo }
+//  Body : { }
 //  Params : taskId
 router.patch("/:taskId", authenticateUser, updateUserTask);
 
 
 //  -----  Task Fetch -----
-//  Method : GET
+//  Method : POST
 //  Endpoint : api/task
-//  Body : {  }
-//  Params : taskId
-router.post("/filter",authenticateUser,getAllUserTasks)
+//  Body : { filter : {} , sort : {} }
+//  Params : None
+router.post("/filter",authenticateUser,validateUpdateTask(), getAllUserTasks)
 
 export default router;

@@ -5,7 +5,7 @@ export const createTask = async (model) => {
   try {
     return await Task.create(model);
   } catch (error) {
-    throw new Error(error);
+    throw error;
   }
 };
 
@@ -17,7 +17,7 @@ export const updateTask = async (_id, model) => {
       { new: true }
     );
   } catch (error) {
-    throw new Error(error);
+    throw error;
   }
 };
 
@@ -26,7 +26,7 @@ export const getTaskById = async(_id)=>{
     try {
         return await Task.findById({_id})
     } catch (error) {
-        throw new Error(error);
+        throw error;
     }
 }
 
@@ -39,6 +39,6 @@ export const getTasks = async(userId)=>{
     .populate("createdBy", "username email")
 
   } catch (error) {
-    throw new Error(error);
+    throw error
   }
 }

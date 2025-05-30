@@ -24,7 +24,7 @@ export const createTaskIndex = async(newTask)=>{
             },
         })
     } catch (error) {
-        throw new Error(`An Unexpected Error Occured ${error}`)
+        throw error
     }
    
 }
@@ -50,7 +50,7 @@ export const updateTaskIndex = async(updatedTask)=>{
             },
         })
     } catch (error) {
-        throw new Error(`An Unexpected Error Occured ${error}`)
+        throw error
     }
 }
 
@@ -77,6 +77,6 @@ export const getFilteredTasks = async({filterQuery,sortQuery})=>{
        }) 
 
     } catch (error) {
-        throw new Error(`An Unexpected Error Occured ${error}`)
+        throw error
     }
 }

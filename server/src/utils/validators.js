@@ -1,17 +1,17 @@
-import { validationResult, check } from "express-validator";
+import { validationResult, check, body } from "express-validator";
 import jwt from "jsonwebtoken";
 
 // validators
 export const validateUserSignin = () => {
   return [
-    check("email")
+    body("email")
       .trim()
       .escape()
       .notEmpty()
       .withMessage("Please input your email.")
       .isEmail()
       .withMessage("Please input a valid email"),
-    check("password")
+    body("password")
       .trim()
       .escape()
       .notEmpty()
@@ -38,7 +38,7 @@ export const validateUserSignin = () => {
 
 export const validateEmail = () => {
   return [
-    check("email")
+    body("email")
       .trim()
       .escape()
       .notEmpty()
@@ -57,7 +57,7 @@ export const validateEmail = () => {
 
 export const validatePassword = () => {
   return [
-    check("password")
+    body("password")
       .trim()
       .escape()
       .notEmpty()
@@ -85,27 +85,26 @@ export const validatePassword = () => {
 
 export const validateCreateTask = () => {
   return [
-    check("title")
+    body("title")
       .trim()
-      .escape()
       .notEmpty()
       .withMessage("Please Input Task Title"),
-    check("deadLine")
+    body("deadLine")
       .trim()
       .isDate()
       .withMessage("Please Enter a Valid Date")
       .notEmpty()
       .withMessage("Please Enter a Date in String Format"),
-    check("priority")
+    body("priority")
       .trim()
       .escape()
       .isString()
       .notEmpty()
       .withMessage("Please Enter Priority Constraints"),
-    check("status")
+    body("status")
       .trim()
       .escape(),
-    check("assignedTo")
+    body("assignedTo")
       .trim()
       .notEmpty()
       .withMessage("Please Provide the Assigned To field"),
@@ -118,6 +117,43 @@ export const validateCreateTask = () => {
     },
   ];
 };
+
+export const validateUpdateTask = ()=>{
+  return [
+    body("title")
+      .optional()
+      .trim(),
+    body("deadLine")
+      .optional()
+      .trim()
+      .isDate()
+      .withMessage("Please Enter a Valid Date")
+      .isString()
+      .withMessage("Please Enter a Date in String Format"),
+    body("priority")
+      .optional()
+      .trim()
+      .escape()
+      .isString()
+      .withMessage("Priority must be a string"),
+    body("status")
+      .optional()
+      .trim()
+      .escape()
+      .isString()
+      .withMessage("Status must be a string"),
+    body("assignedTo")
+      .optional()
+      .trim(),
+    (req, res, next) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+      next();
+    },
+  ];
+}
 
 //JWT Authentication
 export const authenticateUser = (req, res, next) => {

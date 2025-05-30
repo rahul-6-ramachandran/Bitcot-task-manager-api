@@ -23,7 +23,7 @@ app.use(cors())
 app.use(limiter)
 
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 2255
 
 // DB Connection
 connectDB()
