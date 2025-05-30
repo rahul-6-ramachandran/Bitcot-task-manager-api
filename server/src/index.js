@@ -2,7 +2,8 @@
 import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
-
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
 // middleware imports
 import { limiter } from './middlewares/index.js'
 
@@ -11,6 +12,7 @@ import { authRoute, logRoute, taskRoute } from './routes/index.js'
 import { connectDB } from './config/db/database.js'
 import esClient, { runElasticClient } from './config/elasticSearch/elasticClient.js'
 import { handleError } from './middlewares/errorHandling.js'
+import { swaggerOptions } from './utils/swagger.js';
 
 
 dotenv.configDotenv()
@@ -23,7 +25,12 @@ app.use(cors())
 app.use(limiter)
 
 
+
 const PORT = process.env.PORT || 2255
+
+const swaggerSpec = swaggerJSDoc(swaggerOptions);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // DB Connection
 connectDB()

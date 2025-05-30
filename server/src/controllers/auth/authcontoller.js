@@ -113,7 +113,7 @@ const updatePassword = async (req, res) => {
   const user = await getUserById(userId);
 
   if (!user) {
-    return res.status(500).json({ error: "Cannot Find User" });
+    return res.status(404).json({ error: "Cannot Find User" });
   }
 
   const hashedPassword = await hashUserPassword(req.body.password);
@@ -126,6 +126,7 @@ const updatePassword = async (req, res) => {
     }
   });
 };
+
 
 export {
   registerUser,
