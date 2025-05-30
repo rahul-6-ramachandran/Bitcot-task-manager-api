@@ -36,7 +36,7 @@ Organized project structure for maintainability and scalability.
  
 ## Backend Apis
 
-Swagger Api Docs - [/api-docs](http://localhost:2255/api-docs/ (when the backend is running)) 
+Swagger Api Docs - [/api-docs](http://localhost:2255/api-docs/) (when the backend is running)
 
 ## Environment Variables
 
