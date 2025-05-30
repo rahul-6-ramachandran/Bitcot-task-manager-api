@@ -1,6 +1,6 @@
 import express from "express";
 import { authenticateUser, validateCreateTask } from "../../utils/validators.js";
-import { createNewTask,updateUserTask } from "../../controllers/task/taskController.js";
+import { createNewTask,getAllUserTasks,updateUserTask } from "../../controllers/task/taskController.js";
 
 const router = express.Router();
 
@@ -9,7 +9,7 @@ const router = express.Router();
 //  Method : POST
 //  Endpoint : api/task
 //  Body : { title,description,status,priority,deadLine,assignedTo }
-//  Params : 
+//  Params : None
 
 router.post("/", authenticateUser,validateCreateTask(), createNewTask);
 
@@ -28,6 +28,6 @@ router.patch("/:taskId", authenticateUser, updateUserTask);
 //  Endpoint : api/task
 //  Body : {  }
 //  Params : taskId
-// router.get("/filter",authenticateUser,getAllUserTasks)
+router.post("/filter",authenticateUser,getAllUserTasks)
 
 export default router;

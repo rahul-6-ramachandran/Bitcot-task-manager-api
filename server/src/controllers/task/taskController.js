@@ -1,16 +1,18 @@
 import {
   createTask,
   getTaskById,
+  getTasks,
   updateTask,
 } from "../../services/task/taskService.js";
 import {
   createTaskIndex,
+  getFilteredTasks,
   updateTaskIndex,
 } from "../../services/commonService.js";
 
 import { Priority, Status, UserActions } from "../../utils/enum.js";
 import { createLog } from "../../services/logs/logsService.js";
-import { getLogBodyForTaskUpdate } from "../../utils/queryModel.js";
+import { getFilteredQueryForTasks, getLogBodyForTaskUpdate } from "../../utils/queryModel.js";
 
 const createNewTask = async (req, res) => {
   let { body } = req;
@@ -24,11 +26,14 @@ const createNewTask = async (req, res) => {
 
   const newTask = await createTask(body);
 
+ 
   if (!newTask) {
     return res.status(500).json({ error: "Cannot Add Task" });
   }
 
-  createTaskIndex(newTask)
+  console.log(newTask)
+
+  await createTaskIndex(newTask)
     .then(async()=>{
         const logBody = {
             action : UserActions.CREATE_TASK,
@@ -94,10 +99,23 @@ const updateUserTask = async (req, res) => {
   });
 };
 
-const getAllUserTasks = (req,res)=>{
+const getAllUserTasks = async(req,res)=>{
   const {userId} = req.user
+  const {body}  = req
+
   
+  const  query = await getFilteredQueryForTasks(body ,userId)
+
+  const tasks = await getFilteredTasks(query)
+
+  if(tasks){
+    return res.status(200).json({
+      status : 200,
+      userTasks : tasks?.hits?.hits
+    })
+  }
+ 
 }
 
 
-export { createNewTask, updateUserTask };
+export { createNewTask, updateUserTask ,getAllUserTasks };

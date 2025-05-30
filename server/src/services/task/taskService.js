@@ -1,4 +1,5 @@
 import Task from "../../models/task/taskModel.js";
+import { Status } from "../../utils/enum.js";
 
 export const createTask = async (model) => {
   try {
@@ -27,4 +28,17 @@ export const getTaskById = async(_id)=>{
     } catch (error) {
         throw new Error(error);
     }
+}
+
+export const getTasks = async(userId)=>{
+  try {
+    return await Task.find({
+      createdBy : userId,
+      status : {$ne : Status.COMPLETED}
+    })
+    .populate("createdBy", "username email")
+
+  } catch (error) {
+    throw new Error(error);
+  }
 }

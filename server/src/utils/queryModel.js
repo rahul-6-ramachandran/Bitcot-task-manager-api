@@ -1,6 +1,7 @@
 
 import { getUserById } from "../services/user/userService.js"
-import { UserActions } from "./enum.js"
+import { Priority, Status, UserActions } from "./enum.js"
+
 
 export const getLogBodyForTaskUpdate = async(body,req,task)=>{
     const {username , userId} = req.user
@@ -48,4 +49,63 @@ export const getLogBodyForTaskUpdate = async(body,req,task)=>{
     }
 
     return logBody
+}
+
+// ElasticSearch Filter Queries
+export const getFilteredQueryForTasks = async(body,userId)=>{
+    try {
+        const {filter,sort} = body
+    let filterQuery = [
+        { term: { createdBy: userId } },
+    ]
+
+    let sortQuery = []
+
+    if(filter){
+        if(filter?.priority && Object.values(Priority).includes(filter?.priority)){
+            filterQuery.push({ term: { priority : filter?.priority } })
+        }
+    
+        if(filter?.status && Object.values(Status).includes(filter?.status)){
+            filterQuery =[
+                ...filterQuery,
+                { term: { 'status.keyword' : filter?.status } }
+            ] 
+        }
+    
+        if(filter?.deadLine && !isNaN(new Date(filter.deadLine))){
+            const date = new Date(filter.deadLine)
+            date.setHours(23,59,59,999)
+    
+            console.log(date.toISOString())
+            filterQuery.push(
+                {
+                    range: {
+                      deadLine: {
+                        lte : date.toISOString()
+                      }
+                    }
+                  }
+                )
+        }
+    }
+
+    if(sort){
+        if(sort?.priority){
+            sortQuery.push({priorityIndex : { order : "desc" }})
+        }
+        if(sort?.deadLine){
+            sortQuery.push({deadLine : { order : "asc" }})
+        }
+        if(sort?.status){
+            sortQuery.push({statusIndex : { order : "desc" }})
+        }
+       
+
+    }
+    
+    return {filterQuery,sortQuery}
+    } catch (error) {
+        console.log(error)
+    }
 }

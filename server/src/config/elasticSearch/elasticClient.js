@@ -9,6 +9,7 @@ const esClient = new Client({
 export const runElasticClient = async () => {
     try {
       const info = await esClient.info();
+
       if(info)
         console.log('Elasticsearch connected Successfully');
     } catch (error) {

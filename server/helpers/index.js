@@ -60,10 +60,13 @@ const sendPasswordResetMail = async(email,resetToken)=>{
     
 }
 
+const getKeyByValue = async(object, value)=>{
+  return Object.keys(object).find(key => object[key] === value);
+}
 
 const decodeResetToken = (token)=>{
     const decodedToken = jsonwebtoken.verify(token,process.env.JWT_SECRET)
     return decodedToken
 }
 
-export { generateToken , sendPasswordResetMail, decodeResetToken };
+export { generateToken , sendPasswordResetMail, decodeResetToken, getKeyByValue };
