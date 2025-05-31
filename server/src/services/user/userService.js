@@ -1,6 +1,6 @@
 import User from "../../models/user/userModel.js"
 import bcrypt from 'bcrypt'
-import { generateToken } from "../../../helpers/index.js"
+import { generateToken } from "../../helpers/index.js"
 
 const getUserByEmail = async(email)=>{
     try {

@@ -3,7 +3,7 @@ import {
   generateToken,
   hashUserPassword,
   sendPasswordResetMail,
-} from "../../../helpers/index.js";
+} from "../../helpers/index.js";
 import User from "../../models/user/userModel.js";
 import {
   createNewUser,

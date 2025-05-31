@@ -1,4 +1,4 @@
-import { getKeyByValue } from "../../helpers/index.js"
+import { getKeyByValue } from "../helpers/index.js"
 import esClient from "../config/elasticSearch/elasticClient.js"
 import { Priority, PriorityIndex, Status, StatusIndex } from "../utils/enum.js"
 
